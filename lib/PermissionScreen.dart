@@ -16,60 +16,72 @@ class _PermissionScreenState extends State<PermissionScreen> {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xffffffff),
               gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: [new Color(0xff6671e5), new Color(0xff4852d9)]),
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  Color(0xff6671e5),
+                  Color(0xff4852d9),
+                ],
+              ),
             ),
           ),
           Align(
-              alignment: FractionalOffset.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage('icons/hand-wave.png'),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'icons/hand-wave.png',
+                  height: 100, // Ustaw odpowiedni rozmiar
+                  width: 100,
+                ),
+                SizedBox(height: 15.0), // Zamiast Padding
+                Text(
+                  "Hejka!",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 50.0,
+                      color: Colors.white,
+                    ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: 15.0)),
-                  Text("Hejka!",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 50.0,
-                        color: Colors.white,
-                      ))),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                ],
-              )),
+                ),
+                SizedBox(height: 5.0), // Zamiast Padding
+              ],
+            ),
+          ),
           Positioned(
-              left: 0,
-              bottom: 15,
-              right: 0,
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 10.0, right: 10.0),
-                child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all<Color>(Colors.white),
-                          padding: WidgetStateProperty.all(
-                              EdgeInsets.only(top: 12.0, bottom: 12.0))),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyHomePage()));
-                      },
-                      child: Text(
-                        'Kontynuuj',
-                        style: TextStyle(fontSize: 16.0, color: Colors.black),
-                      ),
-                    )),
-              ))
+            left: 0,
+            bottom: 15,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white),
+                    padding: MaterialStateProperty.all(
+                      EdgeInsets.symmetric(vertical: 12.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                    );
+                  },
+                  child: Text(
+                    'Kontynuuj',
+                    style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
