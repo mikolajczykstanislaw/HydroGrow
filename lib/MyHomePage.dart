@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hydro_grow/InformationScreen.dart';
-import 'package:hydro_grow/MonitoringScreen.dart';
+import 'package:HydroGrow/InformationScreen.dart';
+import 'package:HydroGrow/MonitoringScreen.dart';
 
 class MyHomePage extends StatefulWidget {
   @override

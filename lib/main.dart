@@ -1,5 +1,5 @@
-import 'package:hydro_grow/MyHomePage.dart';
-import 'package:hydro_grow/PermissionScreen.dart';
+import 'package:HydroGrow/MyHomePage.dart';
+import 'package:HydroGrow/PermissionScreen.dart';
 import 'package:flutter/material.dart';
 
 import 'SplashScreen.dart';

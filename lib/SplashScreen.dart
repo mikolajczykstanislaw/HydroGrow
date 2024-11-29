@@ -1,5 +1,5 @@
-import 'package:hydro_grow/PermissionScreen.dart';
-import 'package:hydro_grow/main.dart';
+import 'package:HydroGrow/PermissionScreen.dart';
+import 'package:HydroGrow/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
