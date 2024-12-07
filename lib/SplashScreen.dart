@@ -13,10 +13,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     new Future.delayed(
         const Duration(seconds: 2),
-        () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PermissionScreen()))
-            });
+            () => {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PermissionScreen()))
+        });
 
     return Scaffold(
       body: Stack(
@@ -44,10 +44,10 @@ class _SplashScreenState extends State<SplashScreen> {
                       textAlign: TextAlign.center,
                       style: GoogleFonts.lato(
                           textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 42.0,
-                        color: Colors.white,
-                      ))),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 42.0,
+                            color: Colors.white,
+                          ))),
                   Padding(padding: EdgeInsets.only(top: 5.0)),
                   Text(
                       'Aplikacja do monitorowania \n wzrostu roślin hydroponicznych',
@@ -70,10 +70,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         textStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 18.0,
-                      color: Colors.white,
-                    ))),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ))),
               ))
         ],
       ),

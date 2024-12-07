@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 
 class InformationScreen extends StatefulWidget {
   @override
@@ -12,128 +16,107 @@ class _InformationScreenState extends State<InformationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Dane',
+          'Eksport danych',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24.0,
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.transparent, // Ustawienie przezroczystości tła AppBar
+        backgroundColor: Colors.transparent,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue[300]!, Colors.blue[800]!], // Gradient od jasnego do ciemnego niebieskiego
+              colors: [Colors.blue[300]!, Colors.blue[800]!],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
-        automaticallyImplyLeading: false, // Usunięcie domyślnej ikony powrotu
+        automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Ustawienie tła na biały kolor
-            ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: _exportToCSV,
+            child: Text('Eksportuj dane do CSV'),
           ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  Text(
-                    'Historia danych:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  // Placeholder for the data table
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: [
-                        DataColumn(label: Text('Data i godzina')),
-                        DataColumn(label: Text('Temperatura (°C)')),
-                        DataColumn(label: Text('pH')),
-                        DataColumn(label: Text('TDS (ppm)')),
-                      ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text('2024-11-28 10:30')),
-                          DataCell(Text('22.5')),
-                          DataCell(Text('6.8')),
-                          DataCell(Text('450')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('2024-11-28 11:00')),
-                          DataCell(Text('23.1')),
-                          DataCell(Text('6.7')),
-                          DataCell(Text('455')),
-                        ]),
-                        // Add more rows as needed
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Wykresy historyczne:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  // Placeholder for charts
-                  Container(
-                    height: 200,
-                    child: charts.TimeSeriesChart(
-                      _createSampleData(),
-                      animate: true,
-                      dateTimeFactory: charts.LocalDateTimeFactory(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
-    final data = [
-      TimeSeriesSales(date: DateTime(2024, 11, 21), sales: 5),
-      TimeSeriesSales(date: DateTime(2024, 11, 22), sales: 25),
-      TimeSeriesSales(date: DateTime(2024, 11, 23), sales: 100),
-      TimeSeriesSales(date: DateTime(2024, 11, 24), sales: 75),
-      TimeSeriesSales(date: DateTime(2024, 11, 25), sales: 50),
-    ];
+  Future<void> _exportToCSV() async {
+    try {
+      // Sprawdzenie uprawnień do zapisu na urządzeniu
+      var status = await Permission.storage.status;
+      if (status.isGranted || await Permission.storage.request().isGranted) {
+        DatabaseReference database = FirebaseDatabase.instance.ref('sensor_data');
+        DataSnapshot snapshot = await database.get();
+        Map<dynamic, dynamic>? data = snapshot.value as Map?;
 
-    return [
-      charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.date,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data,
-      ),
-    ];
+        if (data != null) {
+          // Pobieranie ostatnich 10 danych
+          List<List<dynamic>> csvData = [];
+          csvData.add(['Temperature DHT (°C)', 'Temperature DS18B20 (°C)', 'Humidity (%)', 'pH', 'TDS (ppm)']); // Nagłówki
+
+          List<Map<String, dynamic>> dataList = [];
+          data.forEach((key, value) {
+            dataList.add({
+              'temperature_dht': value['temperature_dht']?.toDouble() ?? 0,
+              'temperature_ds18b20': value['temperature_ds18b20']?.toDouble() ?? 0,
+              'humidity': value['humidity']?.toDouble() ?? 0,
+              'ph': value['ph']?.toDouble() ?? 0,
+              'tds': value['tds']?.toDouble() ?? 0,
+            });
+          });
+
+          // Sortowanie danych po dacie malejąco i wybieranie ostatnich 10
+          dataList.sort((a, b) => b['temperature_dht'].compareTo(a['temperature_dht']));
+          List<Map<String, dynamic>> last10Data = dataList.take(10).toList();
+
+          // Tworzenie wierszy CSV
+          for (var item in last10Data) {
+            csvData.add([
+              item['temperature_dht'].toString(),
+              item['temperature_ds18b20'].toString(),
+              item['humidity'].toString(),
+              item['ph'].toString(),
+              item['tds'].toString(),
+            ]);
+          }
+
+          // Tworzenie pliku CSV
+          String csv = const ListToCsvConverter().convert(csvData);
+
+          // Pobieranie lokalizacji zapisu pliku w katalogu wewnętrznym aplikacji
+          final directory = await getExternalStorageDirectory();
+          final path = directory?.path ?? '';
+          final file = File('$path/sensor_data_export.csv');
+
+          // Zapisywanie pliku na urządzeniu
+          await file.writeAsString(csv);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Dane zostały zapisane do pliku CSV: ${file.path}')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Brak danych w bazie.')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Brak uprawnień do zapisu na urządzeniu.')),
+        );
+        // Prośba o przyznanie uprawnień
+        await Permission.storage.request();
+      }
+    } catch (e) {
+      print('Błąd podczas eksportu danych: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Wystąpił błąd: $e')),
+      );
+    }
   }
-}
-
-class TimeSeriesSales {
-  final DateTime date;
-  final int sales;
-
-  TimeSeriesSales({required this.date, required this.sales});
 }

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "522148405522",
+    "firebase_url": "https://hydrogrow-52aca-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "hydrogrow-52aca",
+    "storage_bucket": "hydrogrow-52aca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522148405522:android:19f0e9c23173d60d2053cb",
+        "android_client_info": {
+          "package_name": "dev.hydroapp.hydro_grow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBii5vo5IDn7qFf0gGs7qX2zuHzZdGBZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -16,6 +16,10 @@
 	<string>hydro_grow</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Potrzebujemy dostępu do Twoich plików, aby działać poprawnie.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Potrzebujemy dostępu do Twoich plików, aby działać poprawnie.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
