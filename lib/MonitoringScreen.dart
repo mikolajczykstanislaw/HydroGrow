@@ -43,7 +43,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
             textStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24.0,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),
@@ -51,7 +51,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.green[200]!, Colors.green[600]!],
+              colors: [Colors.green[300]!, Colors.green[700]!],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -59,26 +59,32 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.refresh, color: Colors.white),
             onPressed: _refreshData,
           ),
         ],
         automaticallyImplyLeading: false,
       ),
       body: Container(
-        color: Colors.white, // Ustawienie koloru tła na biały
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.green[50]!, Colors.green[100]!],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: _sensorData == null
-            ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.black),))
+            ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green[800]!)))
             : SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
-                elevation: 4,
+                elevation: 5,
                 margin: const EdgeInsets.only(bottom: 16.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -91,10 +97,12 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                           textStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0,
-                            color: Colors.black,
+                            color: Colors.green[800]!,
                           ),
                         ),
                       ),
+                      SizedBox(height: 10),
+                      Divider(),
                       SizedBox(height: 10),
                       _buildListTile('Temperatura w pomieszczeniu', '${_sensorData!.values.first['temperature_dht']}°C', Icons.thermostat, Colors.blueGrey),
                       _buildListTile('Temperatura wody', '${_sensorData!.values.first['temperature_ds18b20']}°C', Icons.thermostat_outlined, Colors.orange),
@@ -107,10 +115,10 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
               ),
               SizedBox(height: 20),
               Card(
-                elevation: 4,
+                elevation: 5,
                 margin: const EdgeInsets.only(bottom: 16.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -123,7 +131,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                           textStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0,
-                            color: Colors.black,
+                            color: Colors.green[800]!,
                           ),
                         ),
                       ),
@@ -164,7 +172,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
               textStyle: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
-                color: Colors.black,
+                color: Colors.green[800]!,
               ),
             ),
           ),
