@@ -29,6 +29,9 @@ class _InformationScreenState extends State<InformationScreen> {
             'humidity': value['humidity']?.toDouble() ?? 0,
             'ph': value['ph']?.toDouble() ?? 0,
             'tds': value['tds']?.toDouble() ?? 0,
+            'date': value['date'] ?? 'N/A',  // Adding date
+            'time': value['time'] ?? 'N/A',  // Adding time
+            'waterLevel': value['waterLevel']?.toDouble() ?? 0,  // Adding waterLevel
           });
         });
 
@@ -137,6 +140,30 @@ class _InformationScreenState extends State<InformationScreen> {
                       ),
                       Text(
                         'TDS: ${item['tds']} ppm',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      // Display the Date and Time
+                      SizedBox(height: 8),
+                      Text(
+                        'Date: ${item['date']}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        'Time: ${item['time']}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      // Display the Water Level
+                      Text(
+                        'Water Level: ${item['waterLevel']} cm',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
